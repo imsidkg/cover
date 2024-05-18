@@ -1,4 +1,4 @@
-import MaxWidthWrapper from "@/app/components/MaxWidthWrapper";
+import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import Link from "next/link";
 
 import React from "react";

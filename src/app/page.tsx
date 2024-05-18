@@ -2,10 +2,12 @@
 import { buttonVariants } from '@/components/ui/button'
 import { ArrowRight, Check, Star } from 'lucide-react'
 import Link from 'next/link'
-import MaxWidthWrapper from './components/MaxWidthWrapper'
+import MaxWidthWrapper from '../components/MaxWidthWrapper'
 import Phone from '@/components/Phone'
-import Reviews from '@/components/Reviews'
+
 import {Icons} from '@/components/Icons'
+import { Reviews } from '@/components/Reviews'
+
 
 export default function Home() {
   return (
@@ -201,7 +203,7 @@ export default function Home() {
         </MaxWidthWrapper>
 
         <div className='pt-16'>
-          <Reviews />
+          <Reviews   />
         </div>
       </section>
 
