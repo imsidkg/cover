@@ -5,6 +5,7 @@ import React, { useState, useTransition } from "react";
 import Dropzone from "react-dropzone";
 import { Progress } from "@/components/ui/progress";
 import { useRouter } from "next/navigation";
+import { useUploadThing } from "@/lib/uploadthing";
 
 type Props = {};
 
@@ -19,6 +20,20 @@ const page = (props: Props) => {
   const onDropRejected = () => {};
 
   const isUploading = true
+
+
+  const {} = useUploadThing('imageUploader' , {
+    onClientUploadComplete : ([data]) => {
+      const configId = data.serverData.configId 
+      startTransition(() => {
+          router.push(`/configure/design?id=${configId}`)
+      })
+    },
+    onUploadProgress(p) {
+      setUploadProgress(p)
+    },
+    
+  })
 
   return (
     <div
