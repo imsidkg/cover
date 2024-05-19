@@ -8,7 +8,7 @@ const f = createUploadthing();
 
 export const ourFileRouter = {
  
-  imageUploader: f({ image: { maxFileSize: "4MB" } }).input(z.object({ configId: z.string().optional() }))
+  imageUploader: f({ image: { maxFileSize: "8MB" } }).input(z.object({ configId: z.string().optional() }))
     
     .middleware(async ({ input }) => {
     
