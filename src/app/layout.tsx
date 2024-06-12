@@ -28,7 +28,7 @@ export default function RootLayout({
           </div>
           <Footer />
         </main>
-        npx shadcn-ui@latest add toast
+        
         <Toaster/>
         
       </body>
