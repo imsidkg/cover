@@ -8,9 +8,19 @@ import React, { useState } from "react";
 import HandleComponent from "@/components/HandleComponent";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { RadioGroup, Radio, Field } from "@headlessui/react";
-import { COLORS } from "@/validators/option-validator";
-import { number } from "zod";
+import { COLORS, MODELS } from "@/validators/option-validator";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Check, ChevronsUpDown } from "lucide-react";
 
 interface DesignConfiguratorProps {
   configId: string;
@@ -23,8 +33,12 @@ const DesignConfigurator = ({
   imageUrl,
   imageDimensions,
 }: DesignConfiguratorProps) => {
-  const [options, setOptions] = useState<{ color: (typeof COLORS)[number] }>({
+  const [options, setOptions] = useState<{
+    color: (typeof COLORS)[number];
+    model: (typeof MODELS.options)[number];
+  }>({
     color: COLORS[0],
+    model: MODELS.options[0],
   });
   return (
     <div className="relative mt-20 grid grid-cols-1 lg:grid-cols-3 mb-20 pb-20">
@@ -98,34 +112,78 @@ const DesignConfigurator = ({
                     }));
                   }}
                 >
-                <Label>Color : {options.color.label}</Label>
-                
+                  <Label>Color : {options.color.label}</Label>
+
                   {COLORS.map((color) => (
-                    <div className='mt-3 flex items-center space-x-3'>
+                    <div className="mt-3 flex items-center space-x-3">
                       <Field key={color.label}>
                         <Radio
                           value={color}
-                          className={({checked }) =>
+                          className={({ checked }) =>
                             cn(
                               "relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 active:ring-0 focus:ring-0 active:outline-none focus:outline-none border-2 border-transparent",
                               {
-                                [`border-${color.tw}`]:  checked,
+                                [`border-${color.tw}`]: checked,
                               }
                             )
                           }
                         >
-                             <span
-                          className={cn(
-                            `bg-${color.tw}`,
-                            'h-10 w-10 rounded-full border border-black border-opacity-10'
-                          )}
-                        />
-                          </Radio>
+                          <span
+                            className={cn(
+                              `bg-${color.tw}`,
+                              "h-10 w-10 rounded-full border border-black border-opacity-10"
+                            )}
+                          />
+                        </Radio>
                       </Field>
                     </div>
                   ))}
-                
                 </RadioGroup>
+
+                <div className="relative flex flex-col gap-3 w-full">
+                  <Label>Model</Label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline"  role='combobox'
+                        className='w-full justify-between'>{options.model.label}
+                          <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                        </Button>
+
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      {MODELS.options.map((model) => (
+                        <DropdownMenuItem 
+                        key={model.label}
+                          className={cn(
+                            'flex text-sm gap-1 items-center p-1.5 cursor-default hover:bg-zinc-100',
+                            {
+                              'bg-zinc-100':
+                                model.label === options.model.label,
+                            }
+                          )}
+                          onClick={() => {
+                            setOptions((prev) => ({
+                              ...prev ,
+                              model
+                            }))
+                          }}
+                        >
+                          <Check 
+                          className={cn(
+                            'mr-2 h-4 w-4',
+                            model.label === options.model.label
+                              ? 'opacity-100'
+                              : 'opacity-0'
+                          )}
+                          />
+
+                          {model.label}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+
+                  </DropdownMenu>
+                </div>
               </div>
             </div>
           </div>
