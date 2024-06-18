@@ -20,7 +20,8 @@ import {
 
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { ArrowRight, Check, ChevronsUpDown } from "lucide-react";
+import { BASE_PRICE } from "@/app/config/products";
 
 interface DesignConfiguratorProps {
   configId: string;
@@ -257,6 +258,24 @@ const DesignConfigurator = ({
             </div>
           </div>
         </ScrollArea>
+        <div>
+        <div className='h-px w-full bg-zinc-200' />
+        <div className='w-full h-full flex justify-end items-center'>
+        <div className='w-full flex gap-6 items-center'>
+          <p className='font-medium whitespace-nowrap'>
+          {formatPrice(
+                  (BASE_PRICE + options.finish.price + options.material.price) /
+                    100
+                )}
+          </p>
+          <Button size='sm'
+                className='w-full'>
+          <ArrowRight className='h-4 w-4 ml-1.5 inline' />
+          </Button>
+
+        </div>
+        </div>
+        </div>
       </div>
     </div>
   );
