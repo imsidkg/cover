@@ -94,6 +94,9 @@ const DesignConfigurator = ({
   async function saveConfiguration () {
 
     try {
+      if (!phoneCaseRef.current || !containerRef.current) {
+        throw new Error("Phone case or container ref is not available");
+      }
       const {
         left: caseLeft ,
         top : caseTop,
@@ -160,9 +163,10 @@ const DesignConfigurator = ({
     const byteArray = new Uint8Array(byteNumbers)
     return new Blob([byteArray], { type: mimeType })
   }
+
   
- const { left: containerLeft, top: containerTop } =
-        containerRef.current!.getBoundingClientRect()
+  
+
 
   return (
     <div className="relative mt-20 grid grid-cols-1 lg:grid-cols-3 mb-20 pb-20">
