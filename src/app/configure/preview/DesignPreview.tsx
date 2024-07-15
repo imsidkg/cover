@@ -2,8 +2,8 @@
 
 import Phone from '@/components/Phone'
 import { Button } from '@/components/ui/button'
-
-import { cn, formatPrice } from '@/lib/utils'
+import { BASE_PRICE, PRODUCT_PRICES } from '@/config/products'
+import { cn, formatPrice, RazorpayPayment } from '@/lib/utils'
 import { COLORS, FINISHES, MODELS } from '@/validators/option-validator'
 import { Configuration } from '@prisma/client'
 import { useMutation } from '@tanstack/react-query'
@@ -14,16 +14,14 @@ import { createCheckoutSession } from './actions'
 import { useRouter } from 'next/navigation'
 import { useToast } from '@/components/ui/use-toast'
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
-import { BASE_PRICE, PRODUCT_PRICES } from '@/app/config/products'
-
+import LoginModal from '@/components/LoginModal'
 
 const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
-
   const router = useRouter()
   const { toast } = useToast()
   const { id } = configuration
   const { user } = useKindeBrowserClient()
-  const [isLoginModalOpen , setIsLoginModalOpen] = useState<boolean>(false)
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false)
 
   const [showConfetti, setShowConfetti] = useState<boolean>(false)
   useEffect(() => setShowConfetti(true))
@@ -36,31 +34,55 @@ const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
     ({ value }) => value === model
   )!
 
-  let totalPrice = BASE_PRICE
+   let totalPrice = BASE_PRICE
   if (material === 'polycarbonate')
     totalPrice += PRODUCT_PRICES.material.polycarbonate
   if (finish === 'textured') totalPrice += PRODUCT_PRICES.finish.textured
+
+
+
+  
 
   const handleCheckout = () => {
     if(user){
       RazorpayPayment();
     }
     else {
-      localStorage.setItem('configuration id' , id);
+      localStorage.setItem('configuration_id' , id);
       setIsLoginModalOpen(true)
 
     }
   }
-
-  const RazorpayPayment = () => {
+   const loadScript = (src: string): Promise<boolean> => {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  };
+  
+   const RazorpayPayment = async () => {
+    const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
+  
+    if (!res) {
+      alert('Razorpay SDK failed to load. Are you online?');
+      return;
+    }
+  
     const options = {
-      key: 'YOUR_RAZORPAY_KEY_ID', // Replace with your Razorpay key ID
+      key: 'rzp_test_tC9X4igiqa45dM', // Replace with your Razorpay key ID
       amount: totalPrice, // Amount in paise (50000 paise = 500 INR)
       currency: 'USD',
       name: 'Your Company Name',
       description: 'Test Transaction',
       image: 'https://example.com/your_logo',
-      handler: function (response:any) {
+      handler: function (response: any) {
         alert(response.razorpay_payment_id);
         alert(response.razorpay_order_id);
         alert(response.razorpay_signature);
@@ -81,8 +103,7 @@ const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
     const rzp = new window.Razorpay(options);
     rzp.open();
   };
-
- 
+  
 
   return (
     <>
@@ -95,9 +116,8 @@ const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
         />
       </div>
 
-      <LoginModal/>t
+      <LoginModal isOpen={isLoginModalOpen} setIsOpen={setIsLoginModalOpen} />
 
-     
       <div className='mt-20 flex flex-col items-center md:grid text-sm sm:grid-cols-12 sm:grid-rows-1 sm:gap-x-6 md:gap-x-8 lg:gap-x-12'>
         <div className='md:col-span-4 lg:col-span-3 md:row-span-2 md:row-end-2'>
           <Phone
@@ -176,8 +196,8 @@ const DesignPreview = ({ configuration }: { configuration: Configuration }) => {
             </div>
 
             <div className='mt-8 flex justify-end pb-12'>
-              <Button onClick={() => handleCheckout()}
-              
+              <Button
+               onClick={RazorpayPayment}
                 className='px-4 sm:px-6 lg:px-8'>
                 Check out <ArrowRight className='h-4 w-4 ml-1.5 inline' />
               </Button>

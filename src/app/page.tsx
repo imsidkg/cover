@@ -1,13 +1,10 @@
-
+import { Icons } from '@/components/Icons'
+import MaxWidthWrapper from '@/components/MaxWidthWrapper'
+import Phone from '@/components/Phone'
+import { Reviews } from '@/components/Reviews'
 import { buttonVariants } from '@/components/ui/button'
 import { ArrowRight, Check, Star } from 'lucide-react'
 import Link from 'next/link'
-import MaxWidthWrapper from '../components/MaxWidthWrapper'
-import Phone from '@/components/Phone'
-
-import {Icons} from '@/components/Icons'
-import { Reviews } from '@/components/Reviews'
-
 
 export default function Home() {
   return (
@@ -112,7 +109,7 @@ export default function Home() {
         </MaxWidthWrapper>
       </section>
 
-     
+      {/* value proposition section */}
       <section className='bg-slate-100 grainy-dark py-24'>
         <MaxWidthWrapper className='flex flex-col items-center gap-16 sm:gap-32'>
           <div className='flex flex-col lg:flex-row items-center gap-4 sm:gap-6'>
@@ -163,7 +160,7 @@ export default function Home() {
               </div>
             </div>
 
-            
+            {/* second user review */}
             <div className='flex flex-auto flex-col gap-4 lg:pr-8 xl:pr-20'>
               <div className='flex gap-0.5 mb-2'>
                 <Star className='h-5 w-5 text-green-600 fill-green-600' />
@@ -203,7 +200,7 @@ export default function Home() {
         </MaxWidthWrapper>
 
         <div className='pt-16'>
-          <Reviews   />
+          <Reviews />
         </div>
       </section>
 

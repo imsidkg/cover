@@ -1,11 +1,10 @@
-import { type ClassValue, clsx } from "clsx"
-import Razorpay from "razorpay"
-import { twMerge } from "tailwind-merge"
+import { type ClassValue, clsx } from 'clsx'
+import { Metadata } from 'next'
+import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
-
 
 export const formatPrice = (price: number) => {
   const formatter = new Intl.NumberFormat('en-US', {
@@ -16,6 +15,36 @@ export const formatPrice = (price: number) => {
   return formatter.format(price)
 }
 
+export function constructMetadata({
+  title = 'CaseCobra - custom high-quality phone cases',
+  description = 'Create custom high-quality phone cases in seconds',
+  image = '/thumbnail.png',
+  icons = '/favicon.ico',
+}: {
+  title?: string
+  description?: string
+  image?: string
+  icons?: string
+} = {}): Metadata {
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [{ url: image }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [image],
+      creator: '@joshtriedcoding',
+    },
+    icons,
+    metadataBase: new URL("https://casecobra.vercel.app/")
+  }
+}
 
 export const loadScript = (src: string): Promise<boolean> => {
   return new Promise((resolve) => {
@@ -40,7 +69,7 @@ export const RazorpayPayment = async () => {
   }
 
   const options = {
-    key: 'rzp_test_u0lvl3tfybywze', // Replace with your Razorpay key ID
+    key: 'rzp_test_tC9X4igiqa45dM', // Replace with your Razorpay key ID
     amount: 50000, // Amount in paise (50000 paise = 500 INR)
     currency: 'INR',
     name: 'Your Company Name',

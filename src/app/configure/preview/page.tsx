@@ -1,36 +1,29 @@
-import { db } from '@/db';
-import { notFound } from 'next/navigation';
-import React from 'react'
-import { string } from 'zod';
-import DesignPreview from './DesignPreview';
+import { db } from '@/db'
+import { notFound } from 'next/navigation'
+import DesignPreview from './DesignPreview'
 
-interface pageProps {
-    searchParams : 
-    {
-        [key : string] : string | string[] | undefined
-}
+interface PageProps {
+  searchParams: {
+    [key: string]: string | string[] | undefined
+  }
 }
 
-const page = async({searchParams} :pageProps) => {
-    const {  id } = searchParams;
+const Page = async ({ searchParams }: PageProps) => {
+  const { id } = searchParams
 
+  if (!id || typeof id !== 'string') {
+    return notFound()
+  }
 
-    if(!id || typeof id !== 'string'){
-        return notFound()
-    }
+  const configuration = await db.configuration.findUnique({
+    where: { id },
+  })
 
-    const configuration = await db.configuration.findUnique({
-        where : {
-            id
-        }
-    })
+  if(!configuration) {
+    return notFound()
+  }
 
-
-  return (
-    <div>
-        <DesignPreview/>
-    </div>
-  )
+  return <DesignPreview configuration={configuration} />
 }
 
-export default page
+export default Page

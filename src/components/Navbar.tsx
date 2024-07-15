@@ -1,17 +1,15 @@
-import MaxWidthWrapper from "@/components/MaxWidthWrapper";
-import Link from "next/link";
+import Link from 'next/link'
+import MaxWidthWrapper from './MaxWidthWrapper'
+import { buttonVariants } from './ui/button'
+import { ArrowRight } from 'lucide-react'
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 
-import React from "react";
-import { buttonVariants } from "./ui/button";
-import { ArrowRight } from "lucide-react";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+const Navbar = async () => {
+  const { getUser } = getKindeServerSession()
+  const user = await getUser()
 
-type Props = {};
-
-const Navbar = async (props: Props) => {
-  const {getUser} = getKindeServerSession()
-  const user  = await getUser()
   const isAdmin = user?.email === process.env.ADMIN_EMAIL
+
   return (
     <nav className='sticky z-[100] h-14 inset-x-0 top-0 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all'>
       <MaxWidthWrapper>
@@ -88,7 +86,7 @@ const Navbar = async (props: Props) => {
         </div>
       </MaxWidthWrapper>
     </nav>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar
