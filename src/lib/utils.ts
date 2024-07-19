@@ -42,7 +42,7 @@ export function constructMetadata({
       creator: '@joshtriedcoding',
     },
     icons,
-    metadataBase: new URL("https://cover.vercel.app/")
+    metadataBase: new URL("https://cover-new.netlify.app/")
   }
 }
 
